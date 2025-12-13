@@ -1,0 +1,27 @@
+[tool.poetry]
+name = "database-tutorial"
+version = "0.1.0"
+description = "Примитивная база данных на Python"
+authors = ["Student <student@example.com>"]
+package-mode = false
+
+# ДОБАВЛЯЕМ ЭТУ СЕКЦИЮ!
+packages = [
+    {include = "src", from = "."}
+]
+
+[tool.poetry.dependencies]
+python = "^3.14.0"
+prettytable = "^3.9.0"
+
+[tool.poetry.group.dev.dependencies]
+ruff = "^0.1.6"
+pytest = "^7.4.0"
+black = "^23.0.0"
+
+[tool.poetry.scripts]
+database = "src.primitive_db.main:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

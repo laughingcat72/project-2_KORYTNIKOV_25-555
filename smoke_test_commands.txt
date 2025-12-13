@@ -1,0 +1,6 @@
+help
+create_table users name:str age:int is_active:bool
+list_tables
+drop_table users
+list_tables
+exit

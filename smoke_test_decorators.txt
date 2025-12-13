@@ -1,0 +1,12 @@
+create_table users name:str age:int is_active:bool
+insert into users values ("Sergei", 28, true)
+select from users where age = 28
+update users set age = 29 where name = "Sergei"
+# Confirm delete should ask y/n
+delete from users where ID = 1
+y
+info users
+# Confirm drop table should ask y/n
+drop_table users
+y
+exit
