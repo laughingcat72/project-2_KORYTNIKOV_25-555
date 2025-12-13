@@ -1,8 +1,0 @@
-create_table users name:str age:int is_active:bool
-insert into users values ("Sergei", 28, true)
-select from users where age = 28
-update users set age = 29 where name = "Sergei"
-select from users
-delete from users where ID = 1
-info users
-exit
