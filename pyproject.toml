@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "database-tutorial"
+name = "project#2_Korytnikov_25_555"
 version = "0.1.0"
 description = "Примитивная база данных на Python"
 authors = ["Student <student@example.com>"]
