@@ -8,14 +8,17 @@ def _parse_columns(raw_columns: List[str]) -> List[Tuple[str, str]]:
     parsed: List[Tuple[str, str]] = []
     for item in raw_columns:
         if ":" not in item:
-            raise ValueError(f"Некорректное значение: {item}. Попробуйте снова.")
+            raise ValueError(
+                f"Некорректное значение: {item}. Попробуйте снова.")
         name, type_name = item.split(":", 1)
         name = name.strip()
         type_name = type_name.strip()
         if not name or not type_name:
-            raise ValueError(f"Некорректное значение: {item}. Попробуйте снова.")
+            raise ValueError(
+                f"Некорректное значение: {item}. Попробуйте снова.")
         if type_name not in SUPPORTED_TYPES:
-            raise ValueError(f"Некорректное значение: {type_name}. Попробуйте снова.")
+            raise ValueError(
+                f"Некорректное значение: {type_name}. Попробуйте снова.")
         parsed.append((name, type_name))
     return parsed
 
@@ -24,7 +27,8 @@ def _parse_columns(raw_columns: List[str]) -> List[Tuple[str, str]]:
 def create_table(metadata: Dict, table_name: str, columns: List[str]) -> Dict:
     metadata = metadata or {"tables": {}}
     if not table_name:
-        raise ValueError("Некорректное значение: имя таблицы. Попробуйте снова.")
+        raise ValueError(
+            "Некорректное значение: имя таблицы. Попробуйте снова.")
     db = metadata.setdefault("tables", {})
     if table_name in db:
         raise RuntimeError(f"Ошибка: Таблица \"{table_name}\" уже существует.")
@@ -66,9 +70,10 @@ def _convert_value(type_name: str, value: str):
         try:
             return int(value)
         except ValueError:
-            raise ValueError(f"Некорректное значение: {value}. Попробуйте снова.")
+            raise ValueError(
+                f"Некорректное значение: {value}. Попробуйте снова.")
     if type_name == "bool":
-        # Accept true/false case-insensitive
+
         v = value.strip().lower()
         if v in ("true", "1"):
             return True
@@ -86,10 +91,11 @@ def insert(metadata: Dict, table_name: str, values: List[str], table_data: Dict)
     metadata = metadata or {"tables": {}}
     table_data = table_data or {"rows": []}
     schema = _schema_for(metadata, table_name)
-    # Exclude ID from values; it is auto-generated
+
     non_id_schema = [s for s in schema if s[0] != "ID"]
     if len(values) != len(non_id_schema):
-        raise ValueError("Некорректное значение: количество значений. Попробуйте снова.")
+        raise ValueError(
+            "Некорректное значение: количество значений. Попробуйте снова.")
     converted = {}
     for (col, t), raw in zip(non_id_schema, values):
         converted[col] = _convert_value(t, raw)
@@ -97,12 +103,13 @@ def insert(metadata: Dict, table_name: str, values: List[str], table_data: Dict)
     new_id = (max([r.get("ID", 0) for r in rows]) + 1) if rows else 1
     row = {"ID": new_id}
     row.update(converted)
-    # add missing boolean/int default? All fields required per note, schema ensures all provided
+
     rows.append(row)
     return table_data
 
 
 _select_cache = create_cacher()
+
 
 @log_time
 @handle_db_errors
@@ -113,6 +120,7 @@ def select(table_data: Dict, where_clause: Dict = None) -> List[Dict]:
         return rows
     key, value = next(iter(where_clause.items()))
     cache_key = (key, value, len(rows))
+
     def compute():
         return [r for r in rows if r.get(key) == value]
     return _select_cache(cache_key, compute)
@@ -130,7 +138,7 @@ def update(table_data: Dict, set_clause: Dict, where_clause: Dict) -> Dict:
                 r[sk] = sv
             updated_any = True
     if not updated_any:
-        # No matching rows is not necessarily an error; keep behavior silent
+
         pass
     return table_data
 

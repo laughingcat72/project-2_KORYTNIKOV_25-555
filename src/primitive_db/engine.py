@@ -36,29 +36,29 @@ def print_help():
 
 
 def _parse_eq(expr: str):
-    # Expect 'key = value' with strings in quotes
+
     if "=" not in expr:
         raise ValueError(f"Некорректное значение: {expr}. Попробуйте снова.")
     k, v = expr.split("=", 1)
     k = k.strip()
     v = v.strip()
-    # Strip quotes for strings
+
     if (v.startswith('"') and v.endswith('"')) or (v.startswith("'") and v.endswith("'")):
         v2 = v[1:-1]
         return {k: v2}
     try:
         return {k: int(v)}
     except ValueError:
-        # Try bool
+
         vl = v.lower()
         if vl in ("true", "false"):
             return {k: True if vl == "true" else False}
-        # If not quoted and not int/bool, treat as raw string
+
         return {k: v}
 
 
 def _meta_path() -> str:
-    # Store metadata in project root as db_meta.json
+
     return os.path.join(os.getcwd(), "db_meta.json")
 
 
